@@ -5,7 +5,7 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 
-const OUTPUT_DIR = path.resolve(__dirname, 'dist');
+const OUTPUT_DIR = path.resolve(__dirname, 'docs');
 const outputFileName = path.join(OUTPUT_DIR, 'index.html');
 
 const render = require('./src/page-template.js');
