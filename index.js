@@ -95,6 +95,8 @@ const init = () => {
       .then(answers => {
         const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNum);
         teamMembers.push(manager);
+        // TEMP
+        console.log(teamMembers);
         createTeam();
       })
       .catch(err => {
@@ -109,27 +111,59 @@ const init = () => {
       {
         type: 'input',
         name: 'engineerName',
-        message: 'What is the name of your Engineer?'
+        message: 'What is the name of your Engineer?',
+        validate: answer => {
+          if (answer !== "") {
+            return true;
+          }
+          return "Please enter at least one character.";
+        }
       },
       {
         type: 'input',
         name: 'engineerId',
-        message: `What is your Engineer's ID?`
+        message: `What is your Engineer's ID?`,
+        validate: answer => {
+          const pass = answer.match(
+            /^[1-9]\d*$/
+          );
+          if (pass) {
+            return true;
+          }
+          return 'Please enter a positive number greater than zero.'
+        }
       },
       {
         type: 'input',
         name: 'engineerEmail',
-        message: `What is your Engineer's email address?`
+        message: `What is your Engineer's email address?`,
+        validate: answer => {
+          const pass = answer.match(
+            /\S+@\S+\.\S+/
+          );
+          if (pass) {
+            return true;
+          }
+          return 'Please enter a valid email address.'
+        }
       },
       {
         type: 'input',
         name: 'engineerGithub',
-        message: `What is your Engineer's Github Username?`
+        message: `What is your Engineer's Github Username?`,
+        validate: answer => {
+          if (answer !== "") {
+            return true;
+          }
+          return "Please enter at least one character.";
+        }
       },
     ])
       .then(answers => {
         const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
         teamMembers.push(engineer);
+        // TEMP
+        console.log(teamMembers);
         createTeam()
       })
       .catch(err => {
@@ -140,10 +174,6 @@ const init = () => {
   };
 
   createManager();
-
-  console.log(teamMembers);
-
-
 };
 
 init();
