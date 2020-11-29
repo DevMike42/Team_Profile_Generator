@@ -1,9 +1,17 @@
 const inquirer = require('inquirer');
+const path = require('path');
+const fs = require('fs');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 
+const OUTPUT_DIR = path.resolve(__dirname, 'dist');
+const outputFileName = path.join(OUTPUT_DIR, 'index.html');
+
+const render = require('./src/page-template.js');
+
 const teamMembers = [];
+
 
 const init = () => {
 
@@ -29,7 +37,7 @@ const init = () => {
             createIntern();
             break;
           default:
-            break;
+            buildTeamHtmlFile();
         }
       })
       .catch(err => {
@@ -244,7 +252,16 @@ const init = () => {
       });
   };
 
+  const buildTeamHtmlFile = () => {
+    if (!fs.existsSync(OUTPUT_DIR)) {
+      fs.mkdirSync(OUTPUT_DIR);
+    }
+    fs.writeFileSync(outputFileName, render(teamMembers), 'utf-8');
+  };
+
   createManager();
 };
 
 init();
+
+
