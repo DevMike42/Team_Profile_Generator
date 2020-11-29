@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
 const teamMembers = [];
 
@@ -23,6 +24,9 @@ const init = () => {
         switch (userChoice.teamMemberChoice) {
           case 'Engineer':
             createEngineer();
+            break;
+          case 'Intern':
+            createIntern();
             break;
           default:
             break;
@@ -170,6 +174,73 @@ const init = () => {
         if (err) {
           throw err;
         }
+      });
+  };
+
+  const createIntern = () => {
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'internName',
+        message: `Please enter the intern's name.`,
+        validate: answer => {
+          if (answer !== "") {
+            return true;
+          }
+          return "Please enter at least one character.";
+        }
+      },
+      {
+        type: 'input',
+        name: 'internId',
+        message: `Please enter the intern's ID.`,
+        validate: answer => {
+          const pass = answer.match(
+            /^[1-9]\d*$/
+          );
+          if (pass) {
+            return true;
+          }
+          return 'Please enter a positive number greater than zero.'
+        }
+      },
+      {
+        type: 'input',
+        name: 'internEmail',
+        message: `Please enter the intern's email address.`,
+        validate: answer => {
+          const pass = answer.match(
+            /\S+@\S+\.\S+/
+          );
+          if (pass) {
+            return true;
+          }
+          return 'Please enter a valid email address.'
+        }
+      },
+      {
+        type: 'input',
+        name: 'internSchool',
+        message: `Please enter the intern's School.`,
+        validate: answer => {
+          if (answer !== "") {
+            return true;
+          }
+          return "Please enter at least one character.";
+        }
+      },
+    ])
+      .then(answers => {
+        const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
+        teamMembers.push(intern)
+        // TEMP
+        console.log(teamMembers);
+        createTeam();
+      })
+      .catch(err => {
+        if (err) {
+          throw err;
+        };
       });
   };
 
