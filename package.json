@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose test/*"
+    "test": "jest --verbose test/*",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,8 @@
   },
   "homepage": "https://github.com/DevMike42/Team_Profile_Generator#readme",
   "dependencies": {
+    "asciiart-logo": "^0.2.6",
+    "colors": "^1.4.0",
     "inquirer": "^7.3.3"
   },
   "devDependencies": {

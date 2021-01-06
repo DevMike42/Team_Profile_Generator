@@ -1,19 +1,24 @@
-const inquirer = require('inquirer');
-const path = require('path');
-const fs = require('fs');
-const Manager = require('./lib/Manager');
-const Engineer = require('./lib/Engineer');
-const Intern = require('./lib/Intern');
+const inquirer = require('inquirer')
+const path = require('path')
+const fs = require('fs')
+const colors = require('colors')
+const logo = require('asciiart-logo')
+const Manager = require('./lib/Manager')
+const Engineer = require('./lib/Engineer')
+const Intern = require('./lib/Intern')
 
-const OUTPUT_DIR = path.resolve(__dirname, 'docs');
-const outputFileName = path.join(OUTPUT_DIR, 'index.html');
+const OUTPUT_DIR = path.resolve(__dirname, 'docs')
+const outputFileName = path.join(OUTPUT_DIR, 'index.html')
 
-const render = require('./src/page-template.js');
+const render = require('./src/page-template.js')
 
-const teamMembers = [];
+const teamMembers = []
 
 
 const init = () => {
+  // Renders startup logo
+  const logoText = logo({ name: 'Team Profile Generator' }).render()
+  console.log(logoText.cyan)
 
   const createTeam = () => {
     inquirer.prompt([
@@ -31,24 +36,24 @@ const init = () => {
       .then(userChoice => {
         switch (userChoice.teamMemberChoice) {
           case 'Engineer':
-            createEngineer();
-            break;
+            createEngineer()
+            break
           case 'Intern':
-            createIntern();
-            break;
+            createIntern()
+            break
           default:
-            buildTeamHtmlFile();
+            buildTeamHtmlFile()
         }
       })
       .catch(err => {
         if (err) {
-          throw err;
+          throw err
         }
-      });
-  };
+      })
+  }
 
   const createManager = () => {
-    console.log(`Let's build your team!`);
+    console.log(`Let's build your team!`.yellow.bold + '\n')
     inquirer.prompt([
       {
         type: 'input',
@@ -56,7 +61,7 @@ const init = () => {
         message: `What is your team Manager's name?`,
         validate: answer => {
           if (answer !== '') {
-            return true;
+            return true
           }
           return 'Please enter at least one character.'
         }
@@ -68,9 +73,9 @@ const init = () => {
         validate: answer => {
           const pass = answer.match(
             /^[1-9]\d*$/
-          );
+          )
           if (pass) {
-            return true;
+            return true
           }
           return 'Please enter a positive number greater than zero.'
         }
@@ -82,9 +87,9 @@ const init = () => {
         validate: answer => {
           const pass = answer.match(
             /\S+@\S+\.\S+/
-          );
+          )
           if (pass) {
-            return true;
+            return true
           }
           return 'Please enter a valid email address.'
         }
@@ -96,27 +101,26 @@ const init = () => {
         validate: answer => {
           const pass = answer.match(
             /^[1-9]\d*$/
-          );
+          )
           if (pass) {
-            return true;
+            return true
           }
           return 'Please enter a positive number greater than zero.'
         }
       }
     ])
       .then(answers => {
-        const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNum);
-        teamMembers.push(manager);
-        // TEMP
-        console.log(teamMembers);
-        createTeam();
+        const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNum)
+        teamMembers.push(manager)
+        console.log('\n--- Manager Created ---'.green.bold + '\n')
+        createTeam()
       })
       .catch(err => {
         if (err) {
-          throw err;
+          throw err
         };
-      });
-  };
+      })
+  }
 
   const createEngineer = () => {
     inquirer.prompt([
@@ -126,9 +130,9 @@ const init = () => {
         message: 'What is the name of your Engineer?',
         validate: answer => {
           if (answer !== "") {
-            return true;
+            return true
           }
-          return "Please enter at least one character.";
+          return "Please enter at least one character."
         }
       },
       {
@@ -138,9 +142,9 @@ const init = () => {
         validate: answer => {
           const pass = answer.match(
             /^[1-9]\d*$/
-          );
+          )
           if (pass) {
-            return true;
+            return true
           }
           return 'Please enter a positive number greater than zero.'
         }
@@ -152,9 +156,9 @@ const init = () => {
         validate: answer => {
           const pass = answer.match(
             /\S+@\S+\.\S+/
-          );
+          )
           if (pass) {
-            return true;
+            return true
           }
           return 'Please enter a valid email address.'
         }
@@ -165,25 +169,24 @@ const init = () => {
         message: `What is your Engineer's Github Username?`,
         validate: answer => {
           if (answer !== "") {
-            return true;
+            return true
           }
-          return "Please enter at least one character.";
+          return "Please enter at least one character."
         }
       },
     ])
       .then(answers => {
-        const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
-        teamMembers.push(engineer);
-        // TEMP
-        console.log(teamMembers);
+        const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub)
+        teamMembers.push(engineer)
+        console.log('\n--- Team Member Created ---'.green.bold + '\n')
         createTeam()
       })
       .catch(err => {
         if (err) {
-          throw err;
+          throw err
         }
-      });
-  };
+      })
+  }
 
   const createIntern = () => {
     inquirer.prompt([
@@ -193,9 +196,9 @@ const init = () => {
         message: `Please enter the intern's name.`,
         validate: answer => {
           if (answer !== "") {
-            return true;
+            return true
           }
-          return "Please enter at least one character.";
+          return "Please enter at least one character."
         }
       },
       {
@@ -205,9 +208,9 @@ const init = () => {
         validate: answer => {
           const pass = answer.match(
             /^[1-9]\d*$/
-          );
+          )
           if (pass) {
-            return true;
+            return true
           }
           return 'Please enter a positive number greater than zero.'
         }
@@ -219,9 +222,9 @@ const init = () => {
         validate: answer => {
           const pass = answer.match(
             /\S+@\S+\.\S+/
-          );
+          )
           if (pass) {
-            return true;
+            return true
           }
           return 'Please enter a valid email address.'
         }
@@ -232,36 +235,37 @@ const init = () => {
         message: `Please enter the intern's School.`,
         validate: answer => {
           if (answer !== "") {
-            return true;
+            return true
           }
-          return "Please enter at least one character.";
+          return "Please enter at least one character."
         }
       },
     ])
       .then(answers => {
-        const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
+        const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool)
         teamMembers.push(intern)
-        // TEMP
-        console.log(teamMembers);
-        createTeam();
+        console.log('\n--- Team Member Created ---'.green.bold + '\n')
+        createTeam()
       })
       .catch(err => {
         if (err) {
-          throw err;
+          throw err
         };
-      });
-  };
+      })
+  }
 
   const buildTeamHtmlFile = () => {
     if (!fs.existsSync(OUTPUT_DIR)) {
-      fs.mkdirSync(OUTPUT_DIR);
+      fs.mkdirSync(OUTPUT_DIR)
     }
-    fs.writeFileSync(outputFileName, render(teamMembers), 'utf-8');
-  };
+    fs.writeFileSync(outputFileName, render(teamMembers), 'utf-8')
 
-  createManager();
-};
+    console.log('\n--- Congratulations! Your Team has been built.\n Please check the docs folder to view your team html file ---'.green.bold + '\n')
+  }
 
-init();
+  createManager()
+}
+
+init()
 
 
